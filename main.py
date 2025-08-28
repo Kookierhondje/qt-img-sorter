@@ -29,6 +29,7 @@ def is_imagefile_in_list(image, targetlist):
         if is_same_file(image, f):
             return True
     else:return False
+# I was going to loop through these func, but then decided I wanted a gui, so introducing QT
 class ImageSorter(QWidget):
     def __init__(self, srcdir, targdir, skimdir, mode=None):
         #Before we even start some QT

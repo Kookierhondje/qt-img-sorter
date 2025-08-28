@@ -96,7 +96,7 @@ class ImageSorter(QWidget):
         shutil.copy2(self.current_img(), os.path.join(self.skimdir, final))
         self.ss = self.ss + 1
         self.loadimg()
-# Launch the app
+
 if __name__ == "__main__":
     app = QApplication(sys.argv)
     parser = argparse.ArgumentParser(description="Sync image files to a target folder, usage: main.py source target skim; All directories must exist!!")

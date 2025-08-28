@@ -10,7 +10,7 @@ import sys
     # We want this program to:
     # Take a directory, toll through the directory for images, for each image show the image, and then save the image to the target dir.
     # images should not be saved if they already exist in the target dir
-    # images should auto be renamed as a resize if they are the same as an image in the directory. 
+    # images should be skipped if they are the same as an image in the directory. 
     # Each image is shown and then renamed as the user directs. 
 def scrape_images_from_dir(fdir):
     exts = {'.jpg', '.jpeg', '.png', '.gif', '.svg', '.bmp', '.tiff', '.webp'}

@@ -34,9 +34,9 @@ def is_imagefile_in_list(image, targetlist):
             return True
     else:return False
 # Example usage:
-sourcedir = "/home/jerry/Pictures/kyet/"
-targetdir = "/home/jerry/Pictures/kyet-org/"
-skimdir = "/home/jerry/Pictures/skim/"
+sourcedir = ""
+targetdir = ""
+skimdir = ""
 class BasicImageApp(QWidget):
     def __init__(self, srcdir, targdir, skimdir, mode=None):
         #Before we even start some QT

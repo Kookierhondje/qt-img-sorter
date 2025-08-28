@@ -3,15 +3,11 @@ from PyQt5.QtCore import Qt
 from PyQt5.QtWidgets import (
     QApplication, QWidget, QLabel, QPushButton, QVBoxLayout, QHBoxLayout, QLineEdit
 )
+import argparse
 import os
 import shutil
 import hashlib
 import sys
-    # We want this program to:
-    # Take a directory, toll through the directory for images, for each image show the image, and then save the image to the target dir.
-    # images should not be saved if they already exist in the target dir
-    # images should be skipped if they are the same as an image in the directory. 
-    # Each image is shown and then renamed as the user directs. 
 def scrape_images_from_dir(fdir):
     exts = {'.jpg', '.jpeg', '.png', '.gif', '.svg', '.bmp', '.tiff', '.webp'}
     return [os.path.join(fdir, f) for f in os.listdir(fdir) if os.path.isfile(os.path.join(fdir, f)) and os.path.splitext(f)[1].lower() in exts]
@@ -33,11 +29,7 @@ def is_imagefile_in_list(image, targetlist):
         if is_same_file(image, f):
             return True
     else:return False
-# Example usage:
-sourcedir = ""
-targetdir = ""
-skimdir = ""
-class BasicImageApp(QWidget):
+class ImageSorter(QWidget):
     def __init__(self, srcdir, targdir, skimdir, mode=None):
         #Before we even start some QT
         self.sourcedir = srcdir
@@ -49,24 +41,15 @@ class BasicImageApp(QWidget):
         self.ss = 0
         super().__init__()
         self.setWindowTitle("Image Sorter")
-        # Image display
         self.image_label = QLabel()
-#        self.image_label.setAlignment(Qt.AlignCenter)
         self.image_label.setFixedSize(800, 800)
-        # Load a placeholder image (you can replace this path)
-#        pixmap.fill(Qt.lightGray)
-        # Text field
         self.text_input = QLineEdit()
         self.text_input.setPlaceholderText("Enter text here...")
-        # Buttons (no functionality)
         skim_button = QPushButton("Skim")
         save_button = QPushButton("Save")
-#        button3 = QPushButton("Button 3")
-        # Layout setup
         button_layout = QHBoxLayout()
         button_layout.addWidget(skim_button)
         button_layout.addWidget(save_button)
-#        button_layout.addWidget(button3)
         main_layout = QVBoxLayout()
         main_layout.addWidget(self.image_label)
         main_layout.addWidget(self.text_input)
@@ -75,14 +58,12 @@ class BasicImageApp(QWidget):
         skim_button.clicked.connect(self.save_to_skim_bin)
         self.setLayout(main_layout)
         self.loadimg()
-    
     def current_img(self):
         return self.source[self.ss]
     def loadimg(self):
         self.image_label.clear()
         self.text_input.clear()
         imgpath = self.current_img()
-        # Check if we've already dealt with the image, if we have, skip it.
         if _fry_hash(imgpath) in self.dealt:
             print(imgpath + " is a copy")
             self.ss = self.ss + 1
@@ -118,6 +99,11 @@ class BasicImageApp(QWidget):
 # Launch the app
 if __name__ == "__main__":
     app = QApplication(sys.argv)
-    window = BasicImageApp(sourcedir, targetdir, skimdir)
+    parser = argparse.ArgumentParser(description="Sync image files to a target folder, usage: main.py source target skim; All directories must exist!!")
+    parser.add_argument(source, help="Path to source directory")
+    parser.add_argument(target, help="Path to target directory")
+    parser.add_argument(skim, help="Path to skim directory")
+    args = parser.parse_args()
+    window = ImageSorter(args.source, args.target, args.skim)
     window.show()
     sys.exit(app.exec_())

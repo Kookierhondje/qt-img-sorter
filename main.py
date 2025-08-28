@@ -11,7 +11,7 @@ import sys
 def scrape_images_from_dir(fdir):
     exts = {'.jpg', '.jpeg', '.png', '.gif', '.svg', '.bmp', '.tiff', '.webp'}
     return [os.path.join(fdir, f) for f in os.listdir(fdir) if os.path.isfile(os.path.join(fdir, f)) and os.path.splitext(f)[1].lower() in exts]
-
+# hashlib is weird and I'm a bit hungry
 def _fry_hash(file):
     frier = hashlib.sha256()
     with open(file, 'rb') as grill:
@@ -59,6 +59,9 @@ class ImageSorter(QWidget):
         self.setLayout(main_layout)
         self.loadimg()
     def current_img(self):
+        # honestly I'm not typing this again
+        # I could wrap this in a try loop that that catches the index error and exit gracefully
+        # But it's funnier that it errors to kill itself
         return self.source[self.ss]
     def loadimg(self):
         self.image_label.clear()
@@ -68,11 +71,13 @@ class ImageSorter(QWidget):
             print(imgpath + " is a copy")
             self.ss = self.ss + 1
             self.loadimg()
-        pixmap = QPixmap(imgpath)
+        pixmap = QPixmap(imgpath) # Yeah, pixmap will eat whatever we give it.
+        # The fat fuck
         self.image_label.setPixmap(pixmap.scaled(
         self.image_label.width(),
         self.image_label.height(),
         Qt.AspectRatioMode.KeepAspectRatio))
+        # Look at him just munch
         self.text_input.setPlaceholderText(imgpath.replace(self.sourcedir, ""))
         self.ext = imgpath.split('.')[1]
 
@@ -89,7 +94,7 @@ class ImageSorter(QWidget):
         self.loadimg()
 
     def save_to_skim_bin(self):
-        print("skim milk")
+        #print("skim milk")
         if not self.text_input.text():
             final = self.text_input.placeholderText()
         final = f'{self.text_input.text()}.{self.ext}'
@@ -98,7 +103,7 @@ class ImageSorter(QWidget):
         self.loadimg()
 
 if __name__ == "__main__":
-    app = QApplication(sys.argv)
+    app = QApplication(sys.argv) # I don't care to look up what QT is doing with my args. I'll handle it myself.
     parser = argparse.ArgumentParser(description="Sync image files to a target folder, usage: main.py source target skim; All directories must exist!!")
     parser.add_argument('source', help="Path to source directory")
     parser.add_argument('target', help="Path to target directory")

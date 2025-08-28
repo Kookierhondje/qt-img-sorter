@@ -100,9 +100,9 @@ class ImageSorter(QWidget):
 if __name__ == "__main__":
     app = QApplication(sys.argv)
     parser = argparse.ArgumentParser(description="Sync image files to a target folder, usage: main.py source target skim; All directories must exist!!")
-    parser.add_argument(source, help="Path to source directory")
-    parser.add_argument(target, help="Path to target directory")
-    parser.add_argument(skim, help="Path to skim directory")
+    parser.add_argument('source', help="Path to source directory")
+    parser.add_argument('target', help="Path to target directory")
+    parser.add_argument('skim', help="Path to skim directory")
     args = parser.parse_args()
     window = ImageSorter(args.source, args.target, args.skim)
     window.show()
